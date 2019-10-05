@@ -1,7 +1,11 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/restechnica/taskforce/internal/hcl"
+)
 
 func main() {
-	fmt.Println("hello world")
+	var config = hcl.Parse("../assets/example2.hcl")
+	fmt.Printf("%+v\n", config)
 }
