@@ -1,5 +1,5 @@
 build:
-	@(go build -o "../bin/taskforce" github.com/restechnica/taskforce/cmd/taskforce)
+	@(go build -o "bin/taskforce" github.com/restechnica/taskforce/cmd/taskforce)
 
 clean:
 	rm -rf bin
