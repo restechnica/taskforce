@@ -5,4 +5,5 @@ clean:
 	rm -rf bin
 
 run:
+	@make build
 	@(cd ./bin; ./taskforce)
