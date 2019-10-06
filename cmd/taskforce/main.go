@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/restechnica/taskforce/internal/arrays"
 	"github.com/restechnica/taskforce/internal/config"
-	"github.com/restechnica/taskforce/internal/hcl"
+	"github.com/restechnica/taskforce/internal/runner"
 	"log"
 	"os"
 )
@@ -13,17 +13,13 @@ func main() {
 	var err error
 	var command config.Command
 	var configuration config.Root
-	var configurationPath, output, workingDirectory string
+	var output, workingDirectory string
 
 	if workingDirectory, err = os.Getwd(); err != nil {
 		log.Fatal(err)
 	}
 
-	if configurationPath, err = config.Find(workingDirectory); err != nil {
-		log.Fatal(err)
-	}
-
-	if configuration, err = hcl.Parse(configurationPath); err != nil {
+	if configuration, err = config.Load(workingDirectory); err != nil {
 		log.Fatal(err)
 	}
 
@@ -33,7 +29,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if output, err = command.Run(); err != nil {
+	if output, err = runner.RunCommand(command); err != nil {
 		log.Print(output)
 		log.Fatal(err)
 	}
