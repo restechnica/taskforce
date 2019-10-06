@@ -2,50 +2,42 @@ package main
 
 import (
 	"fmt"
-	"github.com/kballard/go-shellquote"
 	"github.com/restechnica/taskforce/internal/arrays"
 	"github.com/restechnica/taskforce/internal/config"
 	"github.com/restechnica/taskforce/internal/hcl"
 	"log"
 	"os"
-	"os/exec"
 )
 
 func main() {
-	var configurationPath, workingDirectory string
 	var err error
+	var command config.Command
 	var configuration config.Root
+	var configurationPath, output, workingDirectory string
 
 	if workingDirectory, err = os.Getwd(); err != nil {
-		log.Fatalf("%s", err)
-		return
+		log.Fatal(err)
 	}
 
 	if configurationPath, err = config.Find(workingDirectory); err != nil {
-		log.Fatalf("%s", err)
-		return
+		log.Fatal(err)
 	}
 
 	if configuration, err = hcl.Parse(configurationPath); err != nil {
-		log.Fatalf("%s", err)
-		return
+		log.Fatal(err)
 	}
 
-	var command, _ = arrays.Filter(configuration.Commands, func(command config.Command) bool {
-		return command.Name == "build"
-	})
-
-	var splitCommand, _ = shellquote.Split(command.Expression)
-	var executable = splitCommand[0]
-	var arguments = splitCommand[1:]
-
-	var cmd = exec.Command(executable, arguments...)
-	out, err := cmd.CombinedOutput()
-
-	if err != nil {
-		log.Fatalf("cmd.Run() failed with %s\n", err)
+	if command, err = arrays.Filter(configuration.Commands, func(command config.Command) bool {
+		return command.HasName("build")
+	}); err != nil {
+		log.Fatal(err)
 	}
 
-	fmt.Printf("%s", out)
+	if output, err = command.Run(); err != nil {
+		log.Print(output)
+		log.Fatal(err)
+	}
+
+	fmt.Printf(output)
 	fmt.Printf("%+v\n", configuration)
 }
