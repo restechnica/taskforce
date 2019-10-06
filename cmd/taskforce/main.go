@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/joho/godotenv"
 	"github.com/restechnica/taskforce/internal/arrays"
 	"github.com/restechnica/taskforce/internal/config"
 	"github.com/restechnica/taskforce/internal/hcl"
@@ -11,9 +12,8 @@ import (
 	"path"
 )
 
-const (
-	HCLFileName = "taskforce.hcl"
-)
+const hclFileName = "taskforce.hcl"
+const dotenvFileName = ".env"
 
 func main() {
 	var err error
@@ -21,11 +21,16 @@ func main() {
 	var configuration config.Root
 	var output, workingDirectory string
 
+	if err = godotenv.Load(dotenvFileName); err != nil {
+		log.Println(err)
+		log.Println("Failed to load .env file, proceeding without .env variables")
+	}
+
 	if workingDirectory, err = os.Getwd(); err != nil {
 		log.Fatal(err)
 	}
 
-	var filePath = path.Join(workingDirectory, HCLFileName)
+	var filePath = path.Join(workingDirectory, hclFileName)
 
 	if configuration, err = hcl.LoadHCL(filePath); err != nil {
 		log.Fatal(err)
