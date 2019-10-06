@@ -4,9 +4,15 @@ import (
 	"fmt"
 	"github.com/restechnica/taskforce/internal/arrays"
 	"github.com/restechnica/taskforce/internal/config"
+	"github.com/restechnica/taskforce/internal/hcl"
 	"github.com/restechnica/taskforce/internal/runner"
 	"log"
 	"os"
+	"path"
+)
+
+const (
+	HCLFileName = "taskforce.hcl"
 )
 
 func main() {
@@ -19,7 +25,9 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if configuration, err = config.Load(workingDirectory); err != nil {
+	var filePath = path.Join(workingDirectory, HCLFileName)
+
+	if configuration, err = hcl.LoadHCL(filePath); err != nil {
 		log.Fatal(err)
 	}
 

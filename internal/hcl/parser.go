@@ -8,14 +8,14 @@ import (
 	"github.com/restechnica/taskforce/internal/config"
 )
 
-func Parse(fileName string) (config.Root, error) {
+func Parse(filePath string) (config.Root, error) {
 	var hclFile *hcl.File
 	var hclDiagnostics hcl.Diagnostics
 	var taskforceConfiguration config.Root
 
 	var hclParser = hclparse.NewParser()
 
-	if hclFile, hclDiagnostics = hclParser.ParseHCLFile(fileName); hclDiagnostics.HasErrors() {
+	if hclFile, hclDiagnostics = hclParser.ParseHCLFile(filePath); hclDiagnostics.HasErrors() {
 		return taskforceConfiguration, errors.New(hclDiagnostics.Error())
 	}
 
