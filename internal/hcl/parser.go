@@ -1,26 +1,27 @@
 package hcl
 
 import (
+	"errors"
+	"github.com/hashicorp/hcl/v2"
 	"github.com/hashicorp/hcl/v2/gohcl"
 	"github.com/hashicorp/hcl/v2/hclparse"
 	"github.com/restechnica/taskforce/internal/config"
-	"log"
 )
 
-func Parse(fileName string) config.Root {
-	var parser = hclparse.NewParser()
-	var hclFile, hclDiagnostics = parser.ParseHCLFile(fileName)
-
-	if hclDiagnostics.HasErrors() {
-		log.Fatal(hclDiagnostics.Error())
-	}
-
+func Parse(fileName string) (config.Root, error) {
+	var hclFile *hcl.File
+	var hclDiagnostics hcl.Diagnostics
 	var taskforceConfiguration config.Root
-	hclDiagnostics = gohcl.DecodeBody(hclFile.Body, nil, &taskforceConfiguration)
 
-	if hclDiagnostics.HasErrors() {
-		log.Fatal(hclDiagnostics.Error())
+	var hclParser = hclparse.NewParser()
+
+	if hclFile, hclDiagnostics = hclParser.ParseHCLFile(fileName); hclDiagnostics.HasErrors() {
+		return taskforceConfiguration, errors.New(hclDiagnostics.Error())
 	}
 
-	return taskforceConfiguration
+	if hclDiagnostics = gohcl.DecodeBody(hclFile.Body, nil, &taskforceConfiguration); hclDiagnostics.HasErrors() {
+		return taskforceConfiguration, errors.New(hclDiagnostics.Error())
+	}
+
+	return taskforceConfiguration, nil
 }
