@@ -32,7 +32,7 @@ func main() {
 	}
 
 	if command, err = arrays.Filter(configuration.Commands, func(command config.Command) bool {
-		return command.HasName("build")
+		return command.HasName(os.Args[1])
 	}); err != nil {
 		log.Fatal(err)
 	}
