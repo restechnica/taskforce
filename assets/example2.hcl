@@ -1,3 +1,7 @@
 command build {
-  expression = "make build"
+  executable = "make"
+
+  arguments = [
+    "build"
+  ]
 }
