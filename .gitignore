@@ -3,3 +3,6 @@
 
 # Golang
 bin
+
+# Mac
+.DS_Store
