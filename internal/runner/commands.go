@@ -4,10 +4,11 @@ import (
 	"github.com/restechnica/taskforce/internal/config"
 	"github.com/restechnica/taskforce/internal/extensions/osext"
 	"github.com/restechnica/taskforce/internal/extensions/shellext"
+	"os"
 	"os/exec"
 )
 
-func RunCommand(command config.Command) (output string, err error) {
+func RunCommand(command config.Command) (err error) {
 	var executable string
 	var arguments []string
 
@@ -15,17 +16,14 @@ func RunCommand(command config.Command) (output string, err error) {
 		return
 	}
 
-	var execution = exec.Command(executable, arguments...)
+	var process = exec.Command(executable, arguments...)
 
 	if command.HasDirectory() {
-		execution.Dir = osext.ExpandTilde(command.Directory)
+		process.Dir = osext.ExpandTilde(command.Directory)
 	}
 
-	var combinedOutput []byte
+	process.Stdout = os.Stdout
+	process.Stderr = os.Stderr
 
-	if combinedOutput, err = execution.CombinedOutput(); err != nil {
-		return
-	}
-
-	return string(combinedOutput), nil
+	return process.Run()
 }
