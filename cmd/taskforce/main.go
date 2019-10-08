@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"github.com/joho/godotenv"
-	"github.com/restechnica/taskforce/internal/arrays"
 	"github.com/restechnica/taskforce/internal/config"
+	"github.com/restechnica/taskforce/internal/extensions/slicext"
 	"github.com/restechnica/taskforce/internal/hcl"
 	"github.com/restechnica/taskforce/internal/runner"
 	"log"
@@ -32,11 +32,11 @@ func main() {
 
 	var filePath = path.Join(workingDirectory, hclFileName)
 
-	if configuration, err = hcl.LoadHCL(filePath); err != nil {
+	if configuration, err = hcl.LoadHCLFile(filePath); err != nil {
 		log.Fatal(err)
 	}
 
-	if command, err = arrays.Filter(configuration.Commands, func(command config.Command) bool {
+	if command, err = slicext.Filter(configuration.Commands, func(command config.Command) bool {
 		return command.HasName(os.Args[1])
 	}); err != nil {
 		log.Fatal(err)
