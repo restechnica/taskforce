@@ -18,7 +18,7 @@ func RunCommand(command config.Command) (output string, err error) {
 	var execution = exec.Command(executable, arguments...)
 
 	if command.HasDirectory() {
-		command.Directory = osext.ExpandTilde(command.Directory)
+		execution.Dir = osext.ExpandTilde(command.Directory)
 	}
 
 	var combinedOutput []byte
