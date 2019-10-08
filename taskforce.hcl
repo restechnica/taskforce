@@ -9,3 +9,7 @@ command clean {
 command install {
   expression = "go install github.com/restechnica/taskforce/cmd/taskforce"
 }
+
+command install {
+  expression = "go install github.com/restechnica/taskforce/cmd/"
+}
