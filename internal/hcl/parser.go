@@ -11,31 +11,28 @@ import (
 	"strings"
 )
 
-func Parse(filePath string) (config.Root, error) {
+func ParseHCLFile(filePath string) (root config.Root, err error) {
 	var hclFile *hcl.File
 	var hclDiagnostics hcl.Diagnostics
-	var taskforceConfiguration config.Root
 
 	var hclParser = hclparse.NewParser()
 
 	if hclFile, hclDiagnostics = hclParser.ParseHCLFile(filePath); hclDiagnostics.HasErrors() {
-		return taskforceConfiguration, errors.New(hclDiagnostics.Error())
+		err = errors.New(hclDiagnostics.Error())
+		return
 	}
 
-	var ctx = &hcl.EvalContext{
-		Variables: map[string]cty.Value{
-			"env": cty.ObjectVal(getEnv()),
-		},
+	var hclEvalContext = newHCLEvalContext()
+
+	if hclDiagnostics = gohcl.DecodeBody(hclFile.Body, &hclEvalContext, &root); hclDiagnostics.HasErrors() {
+		err = errors.New(hclDiagnostics.Error())
+		return
 	}
 
-	if hclDiagnostics = gohcl.DecodeBody(hclFile.Body, ctx, &taskforceConfiguration); hclDiagnostics.HasErrors() {
-		return taskforceConfiguration, errors.New(hclDiagnostics.Error())
-	}
-
-	return taskforceConfiguration, nil
+	return
 }
 
-func getEnv() map[string]cty.Value {
+func mapEnvironmentVariables() map[string]cty.Value {
 	var env = make(map[string]cty.Value)
 
 	for _, pair := range os.Environ() {
@@ -48,4 +45,12 @@ func getEnv() map[string]cty.Value {
 	}
 
 	return env
+}
+
+func newHCLEvalContext() hcl.EvalContext {
+	return hcl.EvalContext{
+		Variables: map[string]cty.Value{
+			"env": cty.ObjectVal(mapEnvironmentVariables()),
+		},
+	}
 }

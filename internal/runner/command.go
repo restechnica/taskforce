@@ -1,38 +1,31 @@
 package runner
 
 import (
-	"github.com/kballard/go-shellquote"
 	"github.com/restechnica/taskforce/internal/config"
-	"os"
+	"github.com/restechnica/taskforce/internal/extensions/osext"
+	"github.com/restechnica/taskforce/internal/extensions/shellext"
 	"os/exec"
-	"strings"
 )
 
-func RunCommand(command config.Command) (string, error) {
-	var output []byte
-	var err error
-	var splitCommand []string
+func RunCommand(command config.Command) (output string, err error) {
+	var executable string
+	var arguments []string
 
-	if splitCommand, err = shellquote.Split(command.Expression); err != nil {
-		return "", err
+	if executable, arguments, err = shellext.SplitShellCommand(command.Expression); err != nil {
+		return
 	}
-
-	var executable = splitCommand[0]
-	var arguments = splitCommand[1:]
 
 	var execution = exec.Command(executable, arguments...)
-	execution.Env = os.Environ()
 
 	if command.HasDirectory() {
-		if strings.HasPrefix(command.Directory, "~") {
-			var home = os.Getenv("HOME")
-			command.Directory = strings.Replace(command.Directory, "~", home, 1)
-		}
+		command.Directory = osext.ExpandTilde(command.Directory)
 	}
 
-	if output, err = execution.CombinedOutput(); err != nil {
-		return string(output), err
+	var combinedOutput []byte
+
+	if combinedOutput, err = execution.CombinedOutput(); err != nil {
+		return
 	}
 
-	return string(output), nil
+	return string(combinedOutput), nil
 }
