@@ -48,5 +48,4 @@ func main() {
 	}
 
 	fmt.Printf(output)
-	fmt.Printf("%+v\n", configuration)
 }
