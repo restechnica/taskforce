@@ -42,8 +42,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if output, err = runner.RunCommand(command); err != nil {
-		log.Print(output)
+	if err = runner.RunCommand(command); err != nil {
 		log.Fatal(err)
 	}
 

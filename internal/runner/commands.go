@@ -1,13 +1,16 @@
 package runner
 
 import (
+	"bufio"
+	"fmt"
 	"github.com/restechnica/taskforce/internal/config"
 	"github.com/restechnica/taskforce/internal/extensions/osext"
 	"github.com/restechnica/taskforce/internal/extensions/shellext"
+	"io"
 	"os/exec"
 )
 
-func RunCommand(command config.Command) (output string, err error) {
+func RunCommand(command config.Command) (err error) {
 	var executable string
 	var arguments []string
 
@@ -21,11 +24,34 @@ func RunCommand(command config.Command) (output string, err error) {
 		execution.Dir = osext.ExpandTilde(command.Directory)
 	}
 
-	var combinedOutput []byte
+	var stdout, stderr io.ReadCloser
 
-	if combinedOutput, err = execution.CombinedOutput(); err != nil {
+	if stdout, err = execution.StdoutPipe(); err != nil {
 		return
 	}
 
-	return string(combinedOutput), nil
+	if stderr, err = execution.StderrPipe(); err != nil {
+		return
+	}
+
+	var stdoutScanner, stderrScanner = bufio.NewScanner(stdout), bufio.NewScanner(stderr)
+
+	go printScanner(stdoutScanner)
+	go printScanner(stderrScanner)
+
+	if err = execution.Start(); err != nil {
+		return
+	}
+
+	if err = execution.Wait(); err != nil {
+		return
+	}
+
+	return
+}
+
+func printScanner(scanner *bufio.Scanner) {
+	for scanner.Scan() {
+		fmt.Println(scanner.Text())
+	}
 }
