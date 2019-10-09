@@ -10,6 +10,6 @@ command install {
   expression = "go install github.com/restechnica/taskforce/cmd/taskforce"
 }
 
-command install {
-  expression = "go install github.com/restechnica/taskforce/cmd/"
+command test {
+  expression = "echo ${env.aws_access_key_id}"
 }

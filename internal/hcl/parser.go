@@ -6,6 +6,7 @@ import (
 	"github.com/hashicorp/hcl/v2/gohcl"
 	"github.com/hashicorp/hcl/v2/hclparse"
 	"github.com/restechnica/taskforce/internal/config"
+	"github.com/restechnica/taskforce/internal/extensions/stringsext"
 	"github.com/zclconf/go-cty/cty"
 	"os"
 	"strings"
@@ -36,12 +37,10 @@ func mapEnvironmentVariables() map[string]cty.Value {
 	var env = make(map[string]cty.Value)
 
 	for _, pair := range os.Environ() {
-		if index := strings.IndexByte(pair, '='); index >= 0 {
-			var key = pair[:index]
-			var value = pair[index+1:]
-
-			env[key] = cty.StringVal(value)
-		}
+		var key, value = stringsext.ParseKeyValuePair(pair, '=')
+		var ctyStringValue = cty.StringVal(value)
+		env[strings.ToLower(key)] = ctyStringValue
+		env[strings.ToUpper(key)] = ctyStringValue
 	}
 
 	return env
