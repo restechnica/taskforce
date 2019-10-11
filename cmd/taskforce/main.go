@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/joho/godotenv"
 	"github.com/restechnica/taskforce/internal/config"
 	"github.com/restechnica/taskforce/internal/execution"
@@ -19,7 +18,7 @@ func main() {
 	var err error
 	var command config.Command
 	var configuration config.Root
-	var output, workingDirectory string
+	var workingDirectory string
 
 	if err = godotenv.Load(dotenvFileName); err != nil {
 		log.Println(err)
@@ -45,6 +44,4 @@ func main() {
 	if err = execution.RunCommand(command); err != nil {
 		log.Fatal(err)
 	}
-
-	fmt.Printf(output)
 }

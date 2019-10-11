@@ -1,7 +1,6 @@
 package execution
 
 import (
-	"fmt"
 	"github.com/restechnica/taskforce/internal/config"
 	"github.com/restechnica/taskforce/internal/extensions/osext"
 	"os"
@@ -12,8 +11,6 @@ import (
 func RunCommand(command config.Command) (err error) {
 	var arguments = splitCommand(command.Expression)
 	var process = exec.Command(arguments[0], arguments[1:]...)
-
-	fmt.Println(arguments)
 
 	if command.HasDirectory() {
 		process.Dir = osext.ExpandTilde(command.Directory)
