@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"github.com/joho/godotenv"
 	"github.com/restechnica/taskforce/internal/config"
+	"github.com/restechnica/taskforce/internal/execution"
 	"github.com/restechnica/taskforce/internal/extensions/slicext"
 	"github.com/restechnica/taskforce/internal/hcl"
-	"github.com/restechnica/taskforce/internal/runner"
 	"log"
 	"os"
 	"path"
@@ -42,7 +42,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if err = runner.RunCommand(command); err != nil {
+	if err = execution.RunCommand(command); err != nil {
 		log.Fatal(err)
 	}
 

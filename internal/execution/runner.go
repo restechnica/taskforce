@@ -1,22 +1,19 @@
-package runner
+package execution
 
 import (
+	"fmt"
 	"github.com/restechnica/taskforce/internal/config"
 	"github.com/restechnica/taskforce/internal/extensions/osext"
-	"github.com/restechnica/taskforce/internal/extensions/shellext"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 func RunCommand(command config.Command) (err error) {
-	var executable string
-	var arguments []string
+	var arguments = splitCommand(command.Expression)
+	var process = exec.Command(arguments[0], arguments[1:]...)
 
-	if executable, arguments, err = shellext.SplitShellCommand(command.Expression); err != nil {
-		return
-	}
-
-	var process = exec.Command(executable, arguments...)
+	fmt.Println(arguments)
 
 	if command.HasDirectory() {
 		process.Dir = osext.ExpandTilde(command.Directory)
@@ -26,4 +23,8 @@ func RunCommand(command config.Command) (err error) {
 	process.Stderr = os.Stderr
 
 	return process.Run()
+}
+
+func splitCommand(command string) []string {
+	return strings.Fields(command)
 }

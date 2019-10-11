@@ -16,6 +16,8 @@ command test {
       --template-file some-template-file
       --role-arn some-arn
       --stack-name ai-papi
-      --parameter-overrides some_key=some_value some_key_some=some_value_some
+      --parameter-overrides
+          some_key=some_value
+          some_key_some=some_value_some
   EOF
 }
