@@ -9,7 +9,3 @@ command clean {
 command install {
   expression = "go install github.com/restechnica/taskforce/cmd/taskforce"
 }
-
-command test {
-  expression = "echo ${env.aws_access_key_id}"
-}
