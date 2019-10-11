@@ -9,7 +9,7 @@ import (
 )
 
 func RunCommand(command config.Command) (err error) {
-	var arguments = splitCommand(command.Expression)
+	var arguments = splitExpression(command.Expression)
 	var process = exec.Command(arguments[0], arguments[1:]...)
 
 	if command.HasDirectory() {
@@ -22,6 +22,6 @@ func RunCommand(command config.Command) (err error) {
 	return process.Run()
 }
 
-func splitCommand(command string) []string {
+func splitExpression(command string) []string {
 	return strings.Fields(command)
 }
