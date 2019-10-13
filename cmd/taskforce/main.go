@@ -1,26 +1,21 @@
 package main
 
 import (
-	"github.com/joho/godotenv"
 	"github.com/restechnica/taskforce/internal/config"
+	"github.com/restechnica/taskforce/internal/environment"
 	"github.com/restechnica/taskforce/internal/execution"
-	"github.com/restechnica/taskforce/internal/extensions/slicext"
 	"github.com/restechnica/taskforce/internal/hcl"
 	"log"
 	"os"
 	"path"
 )
 
-const hclFileName = "taskforce.hcl"
-const dotenvFileName = ".env"
-
 func main() {
 	var err error
-	var command config.Command
 	var configuration config.Root
 	var workingDirectory string
 
-	if err = godotenv.Load(dotenvFileName); err != nil {
+	if err = environment.Load("./.env"); err != nil {
 		log.Println(err)
 		log.Println("Failed to load .env file, proceeding without .env variables")
 	}
@@ -29,19 +24,15 @@ func main() {
 		log.Fatal(err)
 	}
 
-	var filePath = path.Join(workingDirectory, hclFileName)
+	var filePath = path.Join(workingDirectory, "taskforce.hcl")
 
 	if configuration, err = hcl.LoadHCLFile(filePath); err != nil {
 		log.Fatal(err)
 	}
 
-	if command, err = slicext.Filter(configuration.Commands, func(command config.Command) bool {
-		return command.HasName(os.Args[1])
-	}); err != nil {
-		log.Fatal(err)
-	}
+	var runner = execution.Runner{Configuration: configuration}
 
-	if err = execution.RunCommand(command); err != nil {
+	if err = runner.RunTaskByName(os.Args[1]); err != nil {
 		log.Fatal(err)
 	}
 }
