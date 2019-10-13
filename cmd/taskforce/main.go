@@ -33,7 +33,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	var runner = execution.Runner{Root: configuration}
+	var runner = execution.Runner{Configuration: configuration}
 
 	if err = runner.RunTaskByName(os.Args[1]); err != nil {
 		log.Fatal(err)

@@ -10,7 +10,7 @@ import (
 )
 
 type Runner struct {
-	Root config.Root
+	Configuration config.Root
 }
 
 func (runner Runner) RunCommand(command config.Command) (err error) {
@@ -30,7 +30,7 @@ func (runner Runner) RunCommand(command config.Command) (err error) {
 func (runner Runner) RunCommandByName(name string) (err error) {
 	var command config.Command
 
-	if command, err = runner.Root.GetCommandByName(name); err != nil {
+	if command, err = runner.Configuration.GetCommandByName(name); err != nil {
 		return
 	}
 
@@ -70,7 +70,7 @@ func (runner Runner) RunTask(task config.Task) (err error) {
 func (runner Runner) RunTaskByName(name string) (err error) {
 	var task config.Task
 
-	if task, err = runner.Root.GetTaskByName(name); err != nil {
+	if task, err = runner.Configuration.GetTaskByName(name); err != nil {
 		return
 	}
 	return runner.RunTask(task)
