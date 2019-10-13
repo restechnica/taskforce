@@ -1,17 +1,19 @@
 command build {
-  expression = "go build -o 'bin/taskforce' github.com/restechnica/taskforce/cmd/taskforce"
+  text = "go build -o 'bin/taskforce' github.com/restechnica/taskforce/cmd/taskforce"
+}
+
+command build {
+  text = "go build -o 'bin/taskforce' github.com/restechnica/taskforce/cmd/taskforce"
 }
 
 command clean {
-  expression = "rm -rf bin"
+  text = "rm -rf bin"
 }
 
 command install {
-  expression = "go install github.com/restechnica/taskforce/cmd/taskforce"
+  text = "go install github.com/restechnica/taskforce/cmd/taskforce"
 }
 
 task test {
-  script {
-    run command build {}
-  }
+  run command install {}
 }

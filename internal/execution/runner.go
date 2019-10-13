@@ -16,7 +16,7 @@ type Runner struct {
 func (runner Runner) RunCommand(command config.Command) (err error) {
 	var arguments []string
 
-	if arguments, err = shell.Parse(command.Expression); err != nil {
+	if arguments, err = shell.Parse(command.Text); err != nil {
 		return
 	}
 
@@ -54,18 +54,9 @@ func (runner Runner) RunInstruction(instruction config.Instruction) (err error) 
 	}
 }
 
-func (runner Runner) RunScript(script config.Script) (err error) {
-	for _, instruction := range script.Instructions {
-		if err = runner.RunInstruction(instruction); err != nil {
-			return
-		}
-	}
-	return
-}
-
 func (runner Runner) RunTask(task config.Task) (err error) {
-	for _, script := range task.Scripts {
-		if err = runner.RunScript(script); err != nil {
+	for _, instruction := range task.Instructions {
+		if err = runner.RunInstruction(instruction); err != nil {
 			return
 		}
 	}

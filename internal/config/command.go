@@ -1,9 +1,9 @@
 package config
 
 type Command struct {
-	Name       string `hcl:"name,label"`
-	Directory  string `hcl:"directory,optional"`
-	Expression string `hcl:"expression,attr"`
+	Name      string `hcl:"name,label"`
+	Directory string `hcl:"directory,optional"`
+	Text      string `hcl:"text,attr"`
 }
 
 func (command Command) HasName(name string) bool {
