@@ -1,4 +1,4 @@
-resource "task" simple {
+task some_task {
   command = ""
 
   variables {
@@ -6,13 +6,13 @@ resource "task" simple {
   }
 }
 
-resource "pipeline" some_pipeline_name {
+pipeline some_pipeline_name {
   branches = [
   ]
   variables {
   }
 
-  step {
+  step {//runs tasks in parallel automatically, no sync options, new step needed for sync, makes more sense to allow tasks to run parallel
     artifacts = [
     ]
     caches = [

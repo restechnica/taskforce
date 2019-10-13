@@ -4,7 +4,6 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/restechnica/taskforce/internal/config"
 	"github.com/restechnica/taskforce/internal/execution"
-	"github.com/restechnica/taskforce/internal/extensions/slicext"
 	"github.com/restechnica/taskforce/internal/hcl"
 	"log"
 	"os"
@@ -16,7 +15,6 @@ const dotenvFileName = ".env"
 
 func main() {
 	var err error
-	var command config.Command
 	var configuration config.Root
 	var workingDirectory string
 
@@ -35,13 +33,9 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if command, err = slicext.Filter(configuration.Commands, func(command config.Command) bool {
-		return command.HasName(os.Args[1])
-	}); err != nil {
-		log.Fatal(err)
-	}
+	var runner = execution.Runner{Root: configuration}
 
-	if err = execution.RunCommand(command); err != nil {
+	if err = runner.RunTaskByName(os.Args[1]); err != nil {
 		log.Fatal(err)
 	}
 }

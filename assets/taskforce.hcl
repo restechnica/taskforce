@@ -13,3 +13,13 @@ command test {
           some_key_some=some_value_some
   EOF
 }
+
+task also_test {
+  script {
+    concurrent = true
+
+    run command test {}
+    run command test {}
+    run task another {}
+  }
+}
