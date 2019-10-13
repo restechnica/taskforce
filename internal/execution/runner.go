@@ -4,9 +4,9 @@ import (
 	"errors"
 	"github.com/restechnica/taskforce/internal/config"
 	"github.com/restechnica/taskforce/internal/extensions/osext"
+	"github.com/restechnica/taskforce/internal/shell"
 	"os"
 	"os/exec"
-	"strings"
 )
 
 type Runner struct {
@@ -14,7 +14,12 @@ type Runner struct {
 }
 
 func (runner Runner) RunCommand(command config.Command) (err error) {
-	var arguments = strings.Fields(command.Expression)
+	var arguments []string
+
+	if arguments, err = shell.Parse(command.Expression); err != nil {
+		return
+	}
+
 	var process = exec.Command(arguments[0], arguments[1:]...)
 
 	if command.HasDirectory() {
