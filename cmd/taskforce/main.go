@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"github.com/restechnica/taskforce/internal/config"
 	"github.com/restechnica/taskforce/internal/environment"
 	"github.com/restechnica/taskforce/internal/execution"
@@ -14,6 +15,12 @@ func main() {
 	var err error
 	var configuration config.Root
 	var workingDirectory string
+
+	var isCommand bool
+	flag.BoolVar(&isCommand, "command", false, "runs a command by the given name")
+	flag.BoolVar(&isCommand, "c", false, "runs a command by the given name")
+
+	flag.Parse()
 
 	if err = environment.Load("./.env"); err != nil {
 		log.Println(err)
@@ -31,8 +38,15 @@ func main() {
 	}
 
 	var runner = execution.Runner{Configuration: configuration}
+	var name = flag.Arg(0)
 
-	if err = runner.RunTaskByName(os.Args[1]); err != nil {
+	if isCommand {
+		err = runner.RunCommandByName(name)
+	} else {
+		err = runner.RunTaskByName(name)
+	}
+
+	if err != nil {
 		log.Fatal(err)
 	}
 }
