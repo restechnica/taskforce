@@ -5,13 +5,13 @@ import (
 	"strings"
 )
 
-const n, tilde = 1, "~"
+const tilde = "~"
 
 var home = os.Getenv("HOME")
 
 func ExpandTilde(target string) string {
 	if strings.HasPrefix(target, tilde) {
-		return strings.Replace(target, tilde, home, n)
+		return strings.Replace(target, tilde, home, 1)
 	}
 
 	return target

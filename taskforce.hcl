@@ -14,6 +14,10 @@ command install {
   text = "go install github.com/restechnica/taskforce/cmd/taskforce"
 }
 
+command test {
+  text = "echo hoi"
+}
+
 task test {
-  run command install {}
+  run command test {}
 }
