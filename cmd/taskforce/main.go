@@ -4,7 +4,6 @@ import (
 	"flag"
 	"github.com/restechnica/taskforce/internal/config"
 	"github.com/restechnica/taskforce/internal/environment"
-	"github.com/restechnica/taskforce/internal/execution"
 	"github.com/restechnica/taskforce/internal/hcl"
 	"log"
 	"os"
@@ -37,7 +36,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	var runner = execution.Runner{Configuration: configuration}
+	var runner = config.Runner{Configuration: configuration}
 	var name = flag.Arg(0)
 
 	if isCommand {

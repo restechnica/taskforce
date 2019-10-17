@@ -1,18 +1,13 @@
 package osext
 
 import (
-	"os"
-	"strings"
+	"github.com/mitchellh/go-homedir"
 )
 
-const tilde = "~"
-
-var home = os.Getenv("HOME")
-
-func ExpandTilde(target string) string {
-	if strings.HasPrefix(target, tilde) {
-		return strings.Replace(target, tilde, home, 1)
+func ExpandTilde(target string) (result string, err error) {
+	if result, err = homedir.Expand(target); err != nil {
+		return
 	}
 
-	return target
+	return
 }
