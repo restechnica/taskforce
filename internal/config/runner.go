@@ -1,8 +1,7 @@
-package execution
+package config
 
 import (
 	"errors"
-	"github.com/restechnica/taskforce/internal/config"
 	"github.com/restechnica/taskforce/internal/extensions/osext"
 	"github.com/restechnica/taskforce/internal/shell"
 	"os"
@@ -10,10 +9,10 @@ import (
 )
 
 type Runner struct {
-	Configuration config.Root
+	Configuration Root
 }
 
-func (runner Runner) RunCommand(command config.Command) (err error) {
+func (runner Runner) RunCommand(command Command) (err error) {
 	var arguments []string
 
 	if arguments, err = shell.Parse(command.Text); err != nil {
@@ -33,7 +32,7 @@ func (runner Runner) RunCommand(command config.Command) (err error) {
 }
 
 func (runner Runner) RunCommandByName(name string) (err error) {
-	var command config.Command
+	var command Command
 
 	if command, err = runner.Configuration.GetCommandByName(name); err != nil {
 		return
@@ -42,7 +41,7 @@ func (runner Runner) RunCommandByName(name string) (err error) {
 	return runner.RunCommand(command)
 }
 
-func (runner Runner) RunInstruction(instruction config.Instruction) (err error) {
+func (runner Runner) RunInstruction(instruction Instruction) (err error) {
 	switch instruction.Type {
 	case "command":
 		return runner.RunCommandByName(instruction.Reference)
@@ -54,7 +53,7 @@ func (runner Runner) RunInstruction(instruction config.Instruction) (err error) 
 	}
 }
 
-func (runner Runner) RunTask(task config.Task) (err error) {
+func (runner Runner) RunTask(task Task) (err error) {
 	for _, instruction := range task.Instructions {
 		if err = runner.RunInstruction(instruction); err != nil {
 			return
@@ -64,7 +63,7 @@ func (runner Runner) RunTask(task config.Task) (err error) {
 }
 
 func (runner Runner) RunTaskByName(name string) (err error) {
-	var task config.Task
+	var task Task
 
 	if task, err = runner.Configuration.GetTaskByName(name); err != nil {
 		return

@@ -15,7 +15,7 @@ command install {
 }
 
 command test {
-  text = "echo hoi"
+  text = "echo test"
 }
 
 task test {

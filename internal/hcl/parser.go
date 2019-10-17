@@ -8,6 +8,7 @@ import (
 	"github.com/restechnica/taskforce/internal/config"
 	"github.com/restechnica/taskforce/internal/extensions/stringsext"
 	"github.com/zclconf/go-cty/cty"
+	"github.com/zclconf/go-cty/cty/function"
 	"os"
 	"strings"
 )
@@ -48,6 +49,9 @@ func mapEnvironmentVariables() map[string]cty.Value {
 
 func newHCLEvalContext() hcl.EvalContext {
 	return hcl.EvalContext{
+		Functions: map[string]function.Function{
+			"var": ResolveVariableFromFile,
+		},
 		Variables: map[string]cty.Value{
 			"env": cty.ObjectVal(mapEnvironmentVariables()),
 		},
