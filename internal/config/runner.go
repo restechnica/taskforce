@@ -15,7 +15,7 @@ type Runner struct {
 func (runner Runner) RunCommand(command Command) (err error) {
 	var arguments []string
 
-	if arguments, err = shell.Parse(command.Text); err != nil {
+	if arguments, err = shell.ParseArguments(command.Text); err != nil {
 		return
 	}
 

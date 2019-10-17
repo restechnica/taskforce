@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func Parse(expression string) (arguments []string, err error) {
+func ParseArguments(expression string) (arguments []string, err error) {
 	var quotedArguments = strings.Fields(expression)
 
 	if arguments, err = shellquote.Split(strings.Join(quotedArguments, " ")); err != nil {
