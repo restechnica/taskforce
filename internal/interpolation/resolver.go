@@ -9,7 +9,9 @@ import (
 )
 
 func ResolveVariableFromFile(filePath string, name string) (value string, err error) {
-	filePath = osext.ExpandTilde(filePath)
+	if filePath, err = osext.ExpandTilde(filePath); err != nil {
+		return
+	}
 
 	if filePath, err = filepath.Abs(filePath); err != nil {
 		return

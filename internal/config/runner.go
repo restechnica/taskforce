@@ -22,7 +22,13 @@ func (runner Runner) RunCommand(command Command) (err error) {
 	var process = exec.Command(arguments[0], arguments[1:]...)
 
 	if command.HasDirectory() {
-		process.Dir = osext.ExpandTilde(command.Directory)
+		var expandedDirectory string
+
+		if expandedDirectory, err = osext.ExpandTilde(command.Directory); err != nil {
+			return
+		}
+
+		process.Dir = expandedDirectory
 	}
 
 	process.Stdout = os.Stdout
@@ -68,5 +74,6 @@ func (runner Runner) RunTaskByName(name string) (err error) {
 	if task, err = runner.Configuration.GetTaskByName(name); err != nil {
 		return
 	}
+
 	return runner.RunTask(task)
 }
