@@ -15,7 +15,7 @@ command install {
 }
 
 command test {
-  text = "echo test"
+  text = "echo ${script("python", "vars.py", "some_var.hello")} ${script("python", "./vars.py", "another_var")} ${script("python", "./vars.py", "another_var")}"
 }
 
 task test {
