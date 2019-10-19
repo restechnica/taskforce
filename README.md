@@ -10,7 +10,7 @@ The key features of Taskforce are:
 
 - **Script Interpolation**: Setting environment variables does not always cut it. Sometimes you just need more complex logic or HTTP calls to get the information you require in your operations, especially in the age of Cloud. Taskforce allows you to use variables from scripts in your language(s) of choice within its configuration.
 
-- **Cross-platform**: All major platforms are supported,
+- **Cross-platform**: All major platforms are supported.
 
 Taskforce has taken parts of the feature set and ideas from other tools like [Serverless.com](https://github.com/serverless/serverless) and [Terraform](https://github.com/hashicorp/terraform) but has made them available outside of those tools with the **technology of your choice**.
 
