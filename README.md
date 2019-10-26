@@ -128,7 +128,7 @@ command env_var_example {
 
 Taskforce supports dotenv. It allows you to provide your own set of environment variables with ease.
 Each command will be able to reference these environment variables like any other environment variable.
-They can be referenced in the Taskforce configuration and they are passed on to the commands ran through Taskforce.
+They can be referenced in the Taskforce configuration and they are passed on to the commands executed through Taskforce.
 See the [dotenv project](https://github.com/bkeepers/dotenv) on GitHub for more information.
 
 1. Create a `.env` file in the same directory as your Taskforce configuration file.
