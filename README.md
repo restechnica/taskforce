@@ -68,7 +68,7 @@ command multiline_example {
 }
 ```
 ```shell script
-$ taskforce -c example
+$ taskforce -c multiline_example
 ```
 
 ## Task
@@ -106,7 +106,8 @@ $ taskforce example
 ```
 
 ## Environment Variables
-Taskforce makes available all environment variables for use in the HCL configuration.
+With Taskforce you have your environment variables at your disposal. You can reference them in the HCL configuration
+and they are passed on to the commands that Taskforce runs.
 Each environment variable is available in upper and lowercase.
 
 ### Usage
@@ -125,15 +126,16 @@ command env_var_example {
 
 ### Dotenv
 
-Taskforce supports dotenv. It allows you to store environment variables for your project only.
-Every task and command will have these environment variables available.
-See the original [dotenv project](https://github.com/bkeepers/dotenv) on GitHub for more information.
+Taskforce supports dotenv. It allows you to provide your own set of environment variables with ease.
+Each command will be able to reference these environment variables like any other environment variable.
+They can be referenced in the Taskforce configuration and they are passed on to the commands ran through Taskforce.
+See the [dotenv project](https://github.com/bkeepers/dotenv) on GitHub for more information.
 
 1. Create a `.env` file in the same directory as your Taskforce configuration file.
-2. Add environment variables as key-value pairs with a `=` inbetween keys and values.
+2. Define environment variables as key-value pairs with a `=` inbetween keys and values.
 3. Reference the environment variables in the Taskforce configuration file as any other environment variable.
 
-a .env when working with AWS and CloudFormation could look like the following:
+A .env when working with AWS and CloudFormation could look like the following:
 ```
 aws_access_key_id=AKIA2UI5876HJJ4WQH4
 aws_secret_access_key=mrWMk01234Gct9876v6IDSpJ8yLpfDjLtwF
@@ -141,7 +143,6 @@ aws_region=eu-west-1
 role_arn=arn:...:...:role:...
 stack_name=stack-name
 ```
-No need to store credentials in the user folder.
 
 ## License
 [Mozilla Public License v2.0](./LICENSE)
