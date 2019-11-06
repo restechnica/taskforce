@@ -56,10 +56,10 @@ var ResolveVariableFromScript = function.New(&function.Spec{
 		},
 	},
 	Type: function.StaticReturnType(cty.String),
-	Impl: func(args []cty.Value, retType cty.Type) (value cty.Value, err error) {
-		var executable = args[0].AsString()
-		var filePath = args[1].AsString()
-		var variableName = args[2].AsString()
+	Impl: func(arguments []cty.Value, returnType cty.Type) (value cty.Value, err error) {
+		var executable = arguments[0].AsString()
+		var filePath = arguments[1].AsString()
+		var variableName = arguments[2].AsString()
 
 		if executable, err = osext.ExpandTilde(executable); err != nil {
 			return
@@ -76,6 +76,41 @@ var ResolveVariableFromScript = function.New(&function.Spec{
 		var variableValue string
 
 		if variableValue, err = resolver.ResolveVariableFromScript(executable, filePath, variableName); err != nil {
+			return
+		}
+
+		value = cty.StringVal(variableValue)
+
+		return
+	},
+})
+
+var ResolveVariableFromJSON = function.New(&function.Spec{
+	Params: []function.Parameter{
+		{
+			Name: "filePath",
+			Type: cty.String,
+		}, {
+			Name: "variableName",
+			Type: cty.String,
+		},
+	},
+	Type: function.StaticReturnType(cty.String),
+	Impl: func(arguments []cty.Value, returnType cty.Type) (value cty.Value, err error) {
+		var filePath = arguments[0].AsString()
+		var variableName = arguments[1].AsString()
+
+		if filePath, err = osext.ExpandTilde(filePath); err != nil {
+			return
+		}
+
+		if filePath, err = filepath.Abs(filePath); err != nil {
+			return
+		}
+
+		var variableValue string
+
+		if variableValue, err = resolver.ResolveVariableFromJSON(filePath, variableName); err != nil {
 			return
 		}
 
