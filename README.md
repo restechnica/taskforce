@@ -143,6 +143,24 @@ role_arn=arn:...:...:role:...
 stack_name=stack-name
 ```
 
+## JSON variables
+
+Taskforce supports JSON variable references.
+
+### Example
+
+```hcl
+command json_var_example {
+  text = <<EOF
+    aws cloudformation deploy
+        --capabilities CAPABILITY_IAM
+        --region ${json("test.json", "aws.region")}
+        --stack-name ${json("test.json", "aws.stack.name")}
+        --template-file some_file
+  EOF
+}
+```
+
 ## Script Variables
 
 Taskforce supports script variable references for complex variable resolution. It is required that the script outputs the variables as JSON.

@@ -50,6 +50,7 @@ func mapEnvironmentVariables() map[string]cty.Value {
 func newHCLEvalContext() hcl.EvalContext {
 	return hcl.EvalContext{
 		Functions: map[string]function.Function{
+			"json":   ResolveVariableFromJSON,
 			"script": ResolveVariableFromScript,
 		},
 		Variables: map[string]cty.Value{
