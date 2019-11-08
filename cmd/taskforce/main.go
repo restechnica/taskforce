@@ -21,9 +21,14 @@ func main() {
 
 	flag.Parse()
 
-	if err = environment.Load("./.env"); err != nil {
+	if err = environment.Load(".env"); err != nil {
 		log.Println(err)
 		log.Println("Failed to load .env file, proceeding without .env variables")
+	}
+
+	if err = environment.Load("taskforce.env"); err != nil {
+		log.Println(err)
+		log.Println("Failed to load taskforce.env file, proceeding without .env variables")
 	}
 
 	if workingDirectory, err = os.Getwd(); err != nil {
