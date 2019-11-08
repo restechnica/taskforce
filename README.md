@@ -124,15 +124,17 @@ command env_var_example {
 }
 ```
 
-### Dotenv
+### Custom environment variables
+Taskforce supports the definition of environment variables.
+Each command will be able to reference these environment variables as shown in the 'Usage'
+section above. See the [dotenv project](https://github.com/bkeepers/dotenv) and its [Golang implementation](https://github.com/joho/godotenv) on GitHub for more information.
 
-Taskforce supports dotenv. It allows you to provide your own set of environment variables with ease.
-Each command will be able to reference these environment variables like any other environment variable.
-See the [dotenv project](https://github.com/bkeepers/dotenv) on GitHub for more information.
+#### Variables with values not shared between environments
 
+The variables are defined in a `.env` file in the root of the project. This file should __not__ be under version control and should only be used for development purposes. 
 1. Create a `.env` file in the same directory as your Taskforce configuration file.
 2. Define environment variables as key-value pairs with a `=` inbetween keys and values.
-3. Reference the environment variables in the Taskforce configuration file as any other environment variable.
+3. Reference the environment variables in the Taskforce configuration file as you would any other environment variable.
 
 A .env file when working with AWS and CloudFormation could look like the following:
 ```
@@ -143,9 +145,9 @@ role_arn=arn:...:...:role:...
 stack_name=stack-name
 ```
 
-### Common variables between environments
+#### Variables with values shared between environments
 
-Taskforce also supports a `taskforce.env` file with environment variables located in the project root.
+The variables are defined in a `taskforce.env` file located in the project root.
 This file is meant to be under version control and should define variables which hold the same value between environments.
 
 The key value pair syntax is exactly the same as the '.env' syntax shown above.
