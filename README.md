@@ -145,7 +145,7 @@ stack_name=stack-name
 
 ### Common variables between environments
 
-Taskforce also supports a `taskforce.env` file with environment variables.
+Taskforce also supports a `taskforce.env` file with environment variables located in the project root.
 This file is meant to be under version control and should define variables which hold the same value between environments.
 
 The key value pair syntax is exactly the same as the '.env' syntax shown above.
