@@ -25,7 +25,7 @@ jobs:
       - name: Build
         run: make build
 
-  build_windows10:
+  build_windows:
     name: Windows
     runs-on: windows-latest
     steps:
