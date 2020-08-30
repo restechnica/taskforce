@@ -2,9 +2,11 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"github.com/restechnica/taskforce/internal/config"
 	"github.com/restechnica/taskforce/internal/environment"
 	"github.com/restechnica/taskforce/internal/hcl"
+	"github.com/restechnica/taskforce/internal/version"
 	"log"
 	"os"
 	"path"
@@ -15,11 +17,20 @@ func main() {
 	var configuration config.Root
 	var workingDirectory string
 
+	var isVersion bool
+	flag.BoolVar(&isVersion, "version", false, "prints the binary version")
+	flag.BoolVar(&isVersion, "v", false, "prints the binary version")
+
 	var isCommand bool
 	flag.BoolVar(&isCommand, "command", false, "runs a command by the given name")
 	flag.BoolVar(&isCommand, "c", false, "runs a command by the given name")
 
 	flag.Parse()
+
+	if isVersion {
+		fmt.Println(version.Version)
+		return
+	}
 
 	if err = environment.Load(".env"); err != nil {
 		log.Println(err)
