@@ -1,9 +1,4 @@
-name: Development
-
-on:
-  push:
-    branches:
-      - master
+name: Release
 
 jobs:
   build_linux:
